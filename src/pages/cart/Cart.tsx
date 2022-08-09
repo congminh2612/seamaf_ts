@@ -9,29 +9,23 @@ import { useLocalStorage } from 'usehooks-ts';
 
 const Cart = () => {
   const { carts, setCarts } = useContext(CartContext);
-  const [productsCarts, setProductsCarts]  = useLocalStorage<Products[]>('carts' ,[])
-  
-  
-  function handleDelete(id:number) {
-    setCarts(carts.filter(item=>item.id!==id))
-    setProductsCarts(carts.filter(item=>item.id!==id))
+
+  function handleDelete(id: number) {
+    setCarts(carts.filter((item) => item.id !== id));
   }
-  function handleDec(id:number) {
-    carts[id].quantity+=1
-    setCarts([...carts])
-    setProductsCarts([...carts])
+  function handleDec(id: number) {
+    carts[id].quantity += 1;
+    setCarts([...carts]);
   }
-  function handleInc(id:number) {
-    
-    if(carts[id].quantity>0){
-      carts[id].quantity-=1
+  function handleInc(id: number) {
+    if (carts[id].quantity > 0) {
+      carts[id].quantity -= 1;
     }
-    setCarts([...carts])
-    setProductsCarts([...carts])
+    setCarts([...carts]);
   }
-  const totals= carts.reduce((total,cart)=>{
-    return total+ (cart.price * cart.quantity)
-  },0)
+  const totals = carts.reduce((total, cart) => {
+    return total + cart.price * cart.quantity;
+  }, 0);
   return (
     <Box pt="105px" pb="105px">
       <Container>
@@ -57,7 +51,7 @@ const Cart = () => {
                   </thead>
                   <tbody>
                     {carts.length > 0 &&
-                      carts.map((cart,index) => {
+                      carts.map((cart, index) => {
                         return (
                           <tr key={cart.id}>
                             <td className="product-col">
@@ -73,14 +67,24 @@ const Cart = () => {
                             <td className="quy-col">
                               <div className="quantity">
                                 <div className="pro-qty">
-                                  <span className="dec qtybtn" onClick={()=>handleInc(index)}>-</span>
+                                  <span
+                                    className="dec qtybtn"
+                                    onClick={() => handleInc(index)}
+                                  >
+                                    -
+                                  </span>
                                   <input
                                     type="text"
                                     name="quantity"
                                     value={cart.quantity}
                                     onChange={() => {}}
                                   />
-                                  <span className="inc qtybtn" onClick={()=>handleDec(index)}>+</span>
+                                  <span
+                                    className="inc qtybtn"
+                                    onClick={() => handleDec(index)}
+                                  >
+                                    +
+                                  </span>
                                 </div>
                                 <button style={{ border: 'none' }}></button>
                               </div>
@@ -99,7 +103,8 @@ const Cart = () => {
                               className="remove-icon"
                               style={{ width: '30px' }}
                             >
-                              <Button onClick={()=>handleDelete(cart.id)}
+                              <Button
+                                onClick={() => handleDelete(cart.id)}
                                 sx={{
                                   marginTop: '-4px',
                                   backgroundColor: 'transparent',

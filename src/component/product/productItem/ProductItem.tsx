@@ -61,7 +61,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
   });
 
   const { carts, setCarts } = useContext(CartContext);
-  const [productsCarts,setProductsCarts ] =useLocalStorage<Products[]>('carts',[])
+  
   function handleAddToCart(id: number) {
     const index = carts.findIndex((item) => item.id === id);
     const newCarts = [...carts];
@@ -71,14 +71,14 @@ const ProductItem: React.FC<Props> = ({ product }) => {
         ...newCarts[index],
         quantity: newCarts[index].quantity + 1,
       };
-      toast.error(' Sản phẩm đã tồn tại trong giỏ hàng ');
+      
     } else {
       newCarts.push({ ...product, quantity: 1 });
-      toast.success(' Thêm sản phẩm vào giỏ hàng thành công ');
+      
     }
-   
+   toast.success(' Thêm sản phẩm vào giỏ hàng thành công ');
     setCarts(newCarts);
-    setProductsCarts(newCarts)
+    
   }
 
   return (

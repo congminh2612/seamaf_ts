@@ -10,24 +10,31 @@ import { Products } from './interface';
 import axios from 'axios';
 import { useContext } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import RequireAuth from './component/Auth/RequireAuth';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/detail">
-              <Route path=":productId" element={<ProductDetail />} />
-            </Route>
+    <div className="App">
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign-up" element={<SignUp />} />
+
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <Layout />
+            </RequireAuth>
+          }
+        >
+          <Route path="/cart" element={<Cart />} />
+          <Route index element={<Home />} />
+          <Route path="/detail">
+            <Route path=":productId" element={<ProductDetail />} />
           </Route>
-        </Routes>
-      </div>
-    </BrowserRouter>
+        </Route>
+      </Routes>
+    </div>
   );
 }
 

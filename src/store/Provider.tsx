@@ -10,13 +10,15 @@ interface propChildren {
 }
 
 const Provider: React.FC<propChildren> = ({ children }) => {
- 
-  const [productCarts, setProductsCarts] =useLocalStorage<Products[]>('carts',[])
-  const [carts, setCarts] = useState<Products[]>(productCarts??[]);
-  
-  
+  const [productCarts, setProductsCarts] = useLocalStorage<Products[]>(
+    'carts',
+    []
+  );
+
   return (
-    <CartContext.Provider value={{ carts, setCarts }}>
+    <CartContext.Provider
+      value={{ carts: productCarts, setCarts: setProductsCarts }}
+    >
       {children}
     </CartContext.Provider>
   );

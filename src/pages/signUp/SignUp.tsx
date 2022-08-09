@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,21 +12,32 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Paper } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import http from '../../component/axios/Aixos';
+import { useState } from 'react';
 
 const theme = createTheme();
 const SignUp = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const handleSubmit = () => {
+    http
+      .post('/auth/register', { name: name, email: email, password: password })
+      .then((res) => {
+        navigate('/login');
+      });
   };
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh' }} p={8} spacing={2}>
+      <Grid
+        container
+        component="main"
+        sx={{ height: '100vh' }}
+        p={8}
+        spacing={2}
+      >
         <Grid
           item
           xs={4}
@@ -50,7 +60,7 @@ const SignUp = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              paddingRight:2,
+              paddingRight: 2,
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -66,27 +76,19 @@ const SignUp = () => {
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextField
                     autoComplete="given-name"
-                    name="firstName"
+                    name="Name"
                     required
                     fullWidth
-                    id="firstName"
-                    label="First Name"
+                    id="Name"
+                    label="Name"
                     autoFocus
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="family-name"
-                  />
-                </Grid>
+
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -95,6 +97,7 @@ const SignUp = () => {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -106,6 +109,7 @@ const SignUp = () => {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -118,16 +122,16 @@ const SignUp = () => {
                 </Grid>
               </Grid>
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={handleSubmit}
               >
                 Sign Up
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link to="/login" >
+                  <Link to="/login">
                     <Typography>Already have an account? Sign in</Typography>
                   </Link>
                 </Grid>

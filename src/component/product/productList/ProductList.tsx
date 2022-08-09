@@ -3,6 +3,8 @@ import { Box, Container, Grid, Stack, Typography } from '@mui/material';
 import React, { memo } from 'react';
 import ProductItem from '../productItem/ProductItem';
 import { motion, AnimatePresence } from 'framer-motion';
+import useFetch from '../../../hook/useFetch';
+import Loading from '../../loading/Loading'
 interface Props {
   product: Products[];
 }
@@ -18,8 +20,11 @@ const variants = {
     transition: { staggerChildren: 0.05, staggerDirection: -0. },
   },
 };
-const ProductList: React.FC<Props> = ({ product }) => {
-  
+const ProductList: React.FC = () => {
+  const baseURL = import.meta.env.VITE_API_BASE as string;
+  const {data, error} =useFetch<Products[]>(`${baseURL}/products`)
+  if(error) console.log(error);
+  if(!data) return <Loading/>
   return (
     <Box>
       <Container>
@@ -50,7 +55,7 @@ const ProductList: React.FC<Props> = ({ product }) => {
               container
               spacing={3}
             >
-              {product?.map((item) => {
+              {data?.map((item) => {
                 return (
                   <Grid
                     variants={variants}

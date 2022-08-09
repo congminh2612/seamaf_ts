@@ -2,12 +2,20 @@ import React from 'react';
 import { Grid, Typography, Box, Container } from '@mui/material';
 import ProductItem from '../productItem/ProductItem';
 import { Products } from '@/interface';
+import useFetch from '../../../hook/useFetch';
+import Loading from '../../loading/Loading'
 
 interface Props {
-  LastProduct: Products[];
+  lastProduct: Products[];
 }
 
-const LastProduct: React.FC<Props> = ({ LastProduct }) => {
+const LastProduct: React.FC = () => {
+  const baseURL = import.meta.env.VITE_API_BASE as string;
+  const { data, error } = useFetch<Products[]>(`${baseURL}/products/last-product`);
+  console.log(data);
+  
+  if (error) console.log(error);
+  if (!data) return <Loading />;
   return (
     <Box pt={2.5} pb={2.5}>
       <Container>
@@ -27,8 +35,8 @@ const LastProduct: React.FC<Props> = ({ LastProduct }) => {
           </Typography>
         </Box>
         <Grid container spacing={2}>
-          {LastProduct.length > 0 &&
-            LastProduct.map((item) => {
+          {data.length > 0 &&
+            data.map((item) => {
               return (
                 <Grid key={item.id} item xs={3}>
                   <ProductItem product={item} />
